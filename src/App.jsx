@@ -1,20 +1,22 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import './index.css'
 import './components.css'
+import './App.css'
 
 /* =========================================
    DIGICHAIN LOGO
    ========================================= */
-function DigiChainLogo({ size = 36, glowing = false }) {
+function DigiChainLogo({ size = 140, glowing = false }) {
   return (
     <img
       src="/digichain-logo.png"
       alt="DigiChain Logo"
-      width={size}
-      height={size}
       style={{
+        width: typeof size === 'number' ? `${size}px` : size,
+        height: 'auto',
         objectFit: 'contain',
         display: 'block',
+        transition: 'width 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
         filter: glowing
           ? 'drop-shadow(0 0 10px rgba(0,245,255,0.9)) drop-shadow(0 0 20px rgba(0,245,255,0.5))'
           : 'none',
@@ -226,8 +228,7 @@ function Navbar() {
         <div className="container navbar-inner">
           {/* Logo */}
           <a href="#home" className="navbar-logo" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>
-            <DigiChainLogo size={48} glowing={true} />
-            <span className="navbar-logo-text">DigiChain</span>
+            <DigiChainLogo size={scrolled ? 105 : 140} glowing={true} />
           </a>
 
           {/* Desktop nav links */}
@@ -237,16 +238,19 @@ function Navbar() {
             ))}
           </ul>
 
-          {/* Status indicator */}
-          <div className="navbar-status">
-            <span className="status-dot"></span>
-            <span className="status-text">LIVE</span>
-          </div>
+          {/* Right side group */}
+          <div className="navbar-right">
+            {/* Status indicator */}
+            <div className="navbar-status">
+              <span className="status-dot"></span>
+              <span className="status-text">LIVE</span>
+            </div>
 
-          {/* Desktop CTA */}
-          <a href="#register" className="navbar-cta" onClick={e => { e.preventDefault(); scrollTo('register') }}>
-            Register Now
-          </a>
+            {/* Desktop CTA */}
+            <a href="#register" className="navbar-cta" onClick={e => { e.preventDefault(); scrollTo('register') }}>
+              Register Now
+            </a>
+          </div>
 
           {/* Hamburger */}
           <button className="hamburger" onClick={() => setMobileOpen(true)} aria-label="Open menu">
@@ -262,8 +266,7 @@ function Navbar() {
       <div className={`mobile-nav ${mobileOpen ? 'open' : ''}`}>
         <button className="mobile-nav-close" onClick={() => setMobileOpen(false)}>✕</button>
         <div className="mobile-nav-logo">
-          <DigiChainLogo size={52} glowing={true} />
-          <span>DigiChain</span>
+          <DigiChainLogo size={160} glowing={true} />
         </div>
         {[['about', 'About'], ['learn', 'Curriculum'], ['hosts', 'Hosts'], ['register', 'Register']].map(([id, label]) => (
           <a key={id} href={`#${id}`} onClick={e => { e.preventDefault(); scrollTo(id) }}>{label}</a>
@@ -433,20 +436,25 @@ function LiveStatsTicker() {
           <span className="ticker-key">BLOCK</span>
           <span className="ticker-value">#{stats.blockHeight.toLocaleString()}</span>
         </div>
-        <div className="ticker-sep">|</div>
+        <span className="ticker-sep" />
         <div className="ticker-item">
           <span className="ticker-key">GAS</span>
           <span className="ticker-value">{stats.gasPrice.toFixed(1)} gwei</span>
         </div>
-        <div className="ticker-sep">|</div>
+        <span className="ticker-sep" />
         <div className="ticker-item">
           <span className="ticker-key">TPS</span>
           <span className="ticker-value">{stats.txPerSec.toFixed(1)}</span>
         </div>
-        <div className="ticker-sep">|</div>
+        <span className="ticker-sep" />
         <div className="ticker-item">
           <span className="ticker-key">ETH</span>
           <span className="ticker-value ticker-green">${stats.ethPrice.toFixed(2)}</span>
+        </div>
+        <span className="ticker-sep" />
+        <div className="ticker-item">
+          <span className="ticker-key" style={{ color: 'var(--neon-purple)' }}>HASH</span>
+          <span className="ticker-value" style={{ fontSize: '0.55rem', opacity: 0.6, fontFamily: 'var(--font-mono)' }}>0x{Math.random().toString(16).slice(2, 8)}...{Math.random().toString(16).slice(2, 6)}</span>
         </div>
       </div>
     </div>
@@ -586,11 +594,20 @@ function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — FIXED */}
       <div className="hero-scroll-indicator">
-        <svg className="scroll-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M6 9L12 15L18 9" stroke="rgba(0,245,255,0.6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <div className="scroll-mouse" />
+        <div className="scroll-chevrons">
+          <svg className="scroll-chevron" width="18" height="10" viewBox="0 0 18 10" fill="none">
+            <path d="M2 2L9 8L16 2" stroke="rgba(0,245,255,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <svg className="scroll-chevron" width="18" height="10" viewBox="0 0 18 10" fill="none">
+            <path d="M2 2L9 8L16 2" stroke="rgba(0,245,255,0.35)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <svg className="scroll-chevron" width="18" height="10" viewBox="0 0 18 10" fill="none">
+            <path d="M2 2L9 8L16 2" stroke="rgba(0,245,255,0.2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
         <span className="scroll-text">SCROLL</span>
       </div>
     </section>
@@ -1039,8 +1056,7 @@ function Footer() {
         <div className="footer-divider" />
         <div className="footer-inner">
           <div className="footer-logo">
-            <DigiChainLogo size={28} glowing={true} />
-            <span>DigiChain</span>
+            <DigiChainLogo size={100} glowing={true} />
           </div>
           <p className="footer-copy">
             © 2025 DigiChain Pioneers · Blockchain Master Class<br />
@@ -1108,20 +1124,90 @@ function CursorGlow() {
 }
 
 /* =========================================
+   SCROLL PROGRESS BAR
+   ========================================= */
+function ScrollProgressBar() {
+  const [progress, setProgress] = useState(0)
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollTop = window.scrollY
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      setProgress(docHeight > 0 ? scrollTop / docHeight : 0)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+  return <div className="scroll-progress-bar" style={{ transform: `scaleX(${progress})` }} />
+}
+
+/* =========================================
+   MARQUEE SCROLLING TEXT
+   ========================================= */
+function Marquee() {
+  const items = [
+    'BLOCKCHAIN', 'SMART CONTRACTS', 'DEFI', 'WEB3', 'NFTs', 'LAYER 2',
+    'CRYPTOGRAPHY', 'CONSENSUS', 'DAPPS', 'TOKENOMICS', 'DAOs', 'ZERO KNOWLEDGE',
+  ]
+  const doubled = [...items, ...items]
+  return (
+    <div className="marquee-wrapper" style={{ padding: '2rem 0', borderTop: '1px solid rgba(0,245,255,0.04)', borderBottom: '1px solid rgba(0,245,255,0.04)' }}>
+      <div className="marquee-track">
+        {doubled.map((item, i) => (
+          <span key={i} className="marquee-item">
+            <span className="marquee-dot" />
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* =========================================
+   WARP SPEED LINES (Ambient Background)
+   ========================================= */
+function WarpLines() {
+  const lines = Array.from({ length: 8 }, (_, i) => ({
+    top: `${Math.random() * 100}%`,
+    width: `${60 + Math.random() * 100}px`,
+    delay: `${i * 0.7 + Math.random() * 2}s`,
+    duration: `${3 + Math.random() * 4}s`,
+    opacity: 0.15 + Math.random() * 0.25,
+  }))
+  return (
+    <div className="warp-lines" aria-hidden="true">
+      {lines.map((l, i) => (
+        <div key={i} className="warp-line" style={{
+          top: l.top,
+          width: l.width,
+          animationDelay: l.delay,
+          animationDuration: l.duration,
+          opacity: l.opacity,
+        }} />
+      ))}
+    </div>
+  )
+}
+
+/* =========================================
    ROOT APP
    ========================================= */
 export default function App() {
   useScrollReveal()
   return (
     <div className="app">
+      <ScrollProgressBar />
       <CursorGlow />
       <MatrixRainCanvas />
       <ParticleCanvas />
+      <WarpLines />
       <Navbar />
       <main>
         <Hero />
+        <Marquee />
         <About />
         <Learn />
+        <Marquee />
         <Hosts />
         <Register />
       </main>
