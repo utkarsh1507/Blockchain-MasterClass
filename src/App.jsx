@@ -1059,7 +1059,7 @@ function Footer() {
             <DigiChainLogo size={100} glowing={true} />
           </div>
           <p className="footer-copy">
-            © 2025 DigiChain Pioneers · Blockchain Master Class<br />
+            © 2026 DigiChain Pioneers · Blockchain Master Class<br />
             Crafted with ⚡ by Varun &amp; Utkarsh
           </p>
           <div className="footer-links">
