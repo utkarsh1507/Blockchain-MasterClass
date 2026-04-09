@@ -880,14 +880,14 @@ function Hosts() {
               <div className="host-badge">✦</div>
             </div>
             <div className="host-name">Varun</div>
-            <div className="host-title">Blockchain Architect</div>
+            <div className="host-title">Blockchain &amp; Crypto Expert</div>
             <div className="host-skills">
-              {['DeFi', 'Smart Contracts', 'Layer 2', 'Security'].map(s => (
+              {['Bitcoin', 'Ethereum', 'Crypto Markets', 'Tokenomics'].map(s => (
                 <span key={s} className="host-skill-tag">{s}</span>
               ))}
             </div>
             <p className="host-bio">
-              Full-stack Web3 developer with expertise in DeFi protocol design, smart contract auditing, and Layer 2 scaling solutions. Passionate about making blockchain accessible to everyone.
+              A seasoned blockchain and crypto expert with deep knowledge of Bitcoin, Ethereum, and emerging crypto ecosystems. Varun specializes in breaking down complex concepts into clear, actionable insights — helping beginners and professionals alike navigate the world of Web3 with confidence.
             </p>
             <div className="digichain-badge">
               <DigiChainLogo size={14} /> DigiChain Pioneer
@@ -901,14 +901,14 @@ function Hosts() {
               <div className="host-badge">✦</div>
             </div>
             <div className="host-name">Utkarsh</div>
-            <div className="host-title">Web3 Strategist</div>
+            <div className="host-title">Blockchain Developer</div>
             <div className="host-skills">
-              {['NFTs', 'DAOs', 'dApps', 'Analytics'].map(s => (
+              {['Solidity', 'Smart Contracts', 'dApps', 'Web3.js'].map(s => (
                 <span key={s} className="host-skill-tag purple">{s}</span>
               ))}
             </div>
             <p className="host-bio">
-              NFT ecosystem builder, tokenomics designer, and dApp developer. Deep expertise in DAO governance, on-chain analytics, and real-world blockchain implementation across multiple industries.
+              A hands-on blockchain developer with real-world experience building decentralized applications and smart contracts on Ethereum and EVM-compatible chains. Utkarsh brings the technical depth to teach you how to actually build, deploy, and ship on-chain — from your first line of Solidity to a fully working dApp.
             </p>
             <div className="digichain-badge">
               <DigiChainLogo size={14} /> DigiChain Pioneer
