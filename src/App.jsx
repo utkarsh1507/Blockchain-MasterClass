@@ -567,7 +567,7 @@ function Hero() {
           <span className="hero-title-line1 hero-title-hacker">
             {titleReady && <HackerTypingText text="Blockchain" delay={0} />}
           </span>
-          <span className="hero-title-line2">Master Class</span>
+          <span className="hero-title-line2">Bootcamp</span>
         </h1>
 
         <p className="hero-subtitle">
@@ -672,7 +672,7 @@ function About() {
               Experience
             </h2>
             <p style={{ marginBottom: '1.2rem', lineHeight: 1.8, fontSize: '0.95rem' }} className="reveal delay-200">
-              The Blockchain Master Class is a comprehensive program designed to take you from a complete beginner to a confident blockchain developer and investor. Whether you're a student, professional, or entrepreneur — this is the course that bridges theory with real-world application.
+              The Blockchain Bootcamp is a comprehensive program designed to take you from a complete beginner to a confident blockchain developer and investor. Whether you're a student, professional, or entrepreneur — this is the course that bridges theory with real-world application.
             </p>
             <p style={{ marginBottom: '1.2rem', lineHeight: 1.8, fontSize: '0.95rem', color: 'var(--text-muted)' }} className="reveal delay-300">
               Curated by industry veterans and Web3 pioneers, every module is packed with live demonstrations, hands-on coding sessions, and actionable insights from real blockchain deployments.
@@ -680,7 +680,7 @@ function About() {
             <div className="about-stats reveal delay-400">
               {[
                 { n: '10', suffix: '+', l: 'Modules' },
-                { n: '40', suffix: '+', l: 'Hours Content' },
+                { n: '8', suffix: '+', l: 'Hours Content' },
                 { n: '100', suffix: '%', l: 'Hands-on' },
                 { n: '∞', suffix: '', l: 'Lifetime Access' },
               ].map(({ n, suffix, l }) => (
@@ -923,19 +923,45 @@ function Hosts() {
 /* =========================================
    REGISTRATION SECTION
    ========================================= */
+// Google Sheets URL is loaded from .env (VITE_GOOGLE_SHEET_URL)
+const GOOGLE_SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL
+
 function Register() {
   const [form, setForm] = useState({ name: '', email: '', location: '', profession: '', contact: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const [toast, setToast] = useState(false)
   const [focusedField, setFocusedField] = useState(null)
 
   const handleChange = (e) => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitted(true)
-    setToast(true)
-    setTimeout(() => setToast(false), 4500)
+    setLoading(true)
+    setError('')
+    try {
+      // Send data to Google Sheets via Apps Script Web App
+      const params = new URLSearchParams({
+        name: form.name,
+        email: form.email,
+        location: form.location,
+        profession: form.profession,
+        contact: form.contact,
+        timestamp: new Date().toISOString(),
+      })
+      await fetch(`${GOOGLE_SHEET_URL}?${params.toString()}`, {
+        method: 'GET',
+        mode: 'no-cors', // Google Apps Script requires no-cors
+      })
+      setSubmitted(true)
+      setToast(true)
+      setTimeout(() => setToast(false), 4500)
+    } catch (err) {
+      setError('Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -1005,8 +1031,13 @@ function Register() {
                     <option value="investor">📈 Investor / Enthusiast</option>
                   </select>
                 </div>
-                <button id="register-submit-btn" className="form-submit" type="submit">
-                  ✦ Reserve My Seat — It's Free
+                {error && (
+                  <p style={{ color: 'var(--neon-pink)', fontSize: '0.82rem', marginBottom: '0.5rem', textAlign: 'center' }}>
+                    ⚠ {error}
+                  </p>
+                )}
+                <button id="register-submit-btn" className="form-submit" type="submit" disabled={loading}>
+                  {loading ? '⏳ Submitting...' : '✦ Reserve Your Seat'}
                 </button>
                 <p className="form-disclaimer">
                   🔒 We respect your privacy. No spam, ever. Unsubscribe anytime.
@@ -1020,13 +1051,6 @@ function Register() {
                   Thank you, <strong style={{ color: 'var(--neon-cyan)' }}>{form.name || 'Pioneer'}</strong>!<br />
                   We'll notify you as soon as the class launches in May. Get ready to master blockchain! ⛓
                 </p>
-                <button
-                  className="btn-secondary"
-                  style={{ marginTop: '2rem' }}
-                  onClick={() => { setSubmitted(false); setForm({ name: '', email: '', location: '', profession: '', contact: '' }) }}
-                >
-                  Register Another →
-                </button>
               </div>
             )}
           </div>
@@ -1059,7 +1083,7 @@ function Footer() {
             <DigiChainLogo size={100} glowing={true} />
           </div>
           <p className="footer-copy">
-            © 2026 DigiChain Pioneers · Blockchain Master Class<br />
+            © 2026 DigiChain Pioneers · Blockchain Bootcamp<br />
             Crafted with ⚡ by Varun &amp; Utkarsh
           </p>
           <div className="footer-links">
